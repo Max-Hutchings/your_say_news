@@ -1,0 +1,33 @@
+server:
+    port: 8080
+
+
+
+spring:
+    application:
+        name: APIGateway
+
+    main:
+        web-application-type: reactive
+
+#    cloud:
+#        gateway:
+#            routes:
+##               - id: sample-service
+#                  uri: lb://sample-service
+#                  predicates:
+#                      - Path=/sample/**
+#            discovery:
+#                locator:
+#                    enabled: true
+
+
+eureka:
+    client:
+        service-url:
+            defaultZone: http://localhost:8761/eureka/
+        register-with-eureka: true
+        fetch-registry: true
+    instance:
+        hostname: localhost
+        prefer-ip-address: true
