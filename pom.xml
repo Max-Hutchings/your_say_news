@@ -17,6 +17,9 @@
     <module>
       EurekaServer
     </module>
+    <module>
+      UserService
+    </module>
   </modules>
 
   <properties>

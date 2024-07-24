@@ -1,0 +1,57 @@
+package com.YourSayNews.UserService.Controller;
+
+import com.YourSayNews.UserService.Entity.User;
+import com.YourSayNews.UserService.Entity.UserDTO;
+import com.YourSayNews.UserService.EntityService.UserService;
+import com.YourSayNews.UserService.Exceptions.InvalidPasswordException;
+import com.YourSayNews.UserService.Exceptions.NoUserFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
+
+@RestController("api/user")
+public class UserController {
+
+    private final UserService userService;
+
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<?> signup(@RequestBody User user){
+        try{
+            User newUser = userService.saveUser(user);
+            UserDTO userDTO = new UserDTO(newUser);
+            return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
+
+        }catch(IllegalArgumentException illegalArgumentException){
+            String message = "Failed due to " + illegalArgumentException.getMessage();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+        }catch(Exception exception){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unknown Error" + exception.getMessage());
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Map<String, String> body){
+        try{
+            User user = userService.getUser(body.get("email"), body.get("password"));
+            UserDTO userDTO = new UserDTO(user);
+            return ResponseEntity.status(HttpStatus.OK).body(userDTO);
+
+        }catch(NoUserFoundException noUserFoundException){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(noUserFoundException.getMessage());
+        }catch(InvalidPasswordException invalidPasswordException){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body((invalidPasswordException.getMessage()));
+        }catch(Exception exception){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unknown Error" + exception.getMessage());
+        }
+    }
+}
