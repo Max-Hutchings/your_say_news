@@ -57,6 +57,13 @@ public class UserService {
         return user;
     }
 
+    public User findUserById(Long userId){
+        User user = userRepository.findById(userId).orElseThrow(() -> new NoUserFoundException());
+        return user;
+    }
 
 
+    public void deleteAll() {
+        userRepository.deleteAll();
+    }
 }

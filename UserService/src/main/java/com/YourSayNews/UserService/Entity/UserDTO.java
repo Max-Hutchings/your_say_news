@@ -1,11 +1,7 @@
 package com.YourSayNews.UserService.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class UserDTO {
 
@@ -19,7 +15,7 @@ public class UserDTO {
 
     private String username;
 
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 
     private Enum<Role> roleEnum;
 
@@ -74,11 +70,11 @@ public class UserDTO {
         this.username = username;
     }
 
-    public Date getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

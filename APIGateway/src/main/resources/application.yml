@@ -10,16 +10,13 @@ spring:
     main:
         web-application-type: reactive
 
-#    cloud:
-#        gateway:
-#            routes:
-##               - id: sample-service
-#                  uri: lb://sample-service
-#                  predicates:
-#                      - Path=/sample/**
-#            discovery:
-#                locator:
-#                    enabled: true
+    cloud:
+        gateway:
+            routes:
+                - id: user-service
+                  uri: lb://USER-SERVICE
+                  predicates:
+                      - Path=/api/user/**
 
 
 eureka:

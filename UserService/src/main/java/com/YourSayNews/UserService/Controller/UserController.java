@@ -10,11 +10,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
-@RestController("api/user")
+@RestController
+@RequestMapping("/api/user")
 public class UserController {
 
     private final UserService userService;
@@ -53,5 +55,17 @@ public class UserController {
         }catch(Exception exception){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unknown Error" + exception.getMessage());
         }
+    }
+
+    @PostMapping("/check_user_exists")
+    public ResponseEntity<?> checkUserExists(@RequestBody Long userId){
+        try{
+            User user = userService.findUserById(userId);
+            return ResponseEntity.status(HttpStatus.OK).body(user);
+        }catch(NoUserFoundException noUserFoundException){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(noUserFoundException.getMessage());
+        }catch(Exception exception){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unknown Error" + exception.getMessage());
+    }
     }
 }
