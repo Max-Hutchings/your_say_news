@@ -2,6 +2,8 @@ package com.YourSayNews.PostService.Controllers;
 
 import com.YourSayNews.PostService.Entity.Post;
 import com.YourSayNews.PostService.Exceptions.InvalidUserIdException;
+import com.YourSayNews.PostService.RestCalls.GetUser;
+import com.YourSayNews.PostService.RestCalls.GetUserClient;
 import com.YourSayNews.PostService.Services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -22,11 +24,13 @@ import java.util.Map;
 public class PostController {
 
     private final PostService postService;
-    private final RestClient restClient = RestClient.create();
+    private final GetUserClient getUserClient;
+
 
     @Autowired
-    public PostController(PostService postService){
+    public PostController(PostService postService, GetUserClient getUserClient){
         this.postService = postService;
+        this.getUserClient = getUserClient;
     }
 
 
@@ -52,16 +56,7 @@ public class PostController {
 
             Long userId = Long.parseLong(userIdStr);
 
-            ResponseEntity<String> userServiceResponse = restClient.post()
-                    .uri("http://UserService/api/user/check_user_exists")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(userId)
-                    .retrieve()
-                    .toEntity(String.class);
-
-            if (userServiceResponse.getStatusCode() != HttpStatus.OK){
-                throw new InvalidUserIdException();
-            }
+            getUserClient.getUserById(userId);
 
             List<Post> posts = postService.getAllUserPosts(userId);
 
