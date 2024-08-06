@@ -1,6 +1,6 @@
 package com.YourSayNews.UserService.Intergration;
 
-import com.YourSayNews.UserService.Entity.Role;
+import com.YourSayNews.UserService.Entity.Enums.Role;
 import com.YourSayNews.UserService.Entity.User;
 import com.YourSayNews.UserService.EntityService.UserService;
 import com.YourSayNews.UserService.Exceptions.TestPrepAndPostError;
@@ -14,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+
+import java.text.SimpleDateFormat;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -38,21 +40,23 @@ public class LoginEndpointTest {
     public void setup() {
         try {
             userService.deleteAll();
-            User user = new User.Builder()
-                    .setfName("Jason")
-                    .setlName("Bourne")
-                    .setEmail("jb@gmail.com")
-                    .setUsername("jb789LovesCake")
-                    .setPassword("MySecurePassword13#")
-                    .setDateOfBirth("17/03/2001")
-                    .setRoleEnum("USER")
+            User user = User.builder()
+                    .fName("Jason")
+                    .lName("Bourne")
+                    .email("jb@gmail.com")
+                    .username("jb789LovesCake")
+                    .password("MySecurePassword13#")
+                    .createdDate(new SimpleDateFormat("dd/MM/yyyy").parse("17/03/2001"))
+                    .roleEnum(Role.USER)
                     .build();
+
             System.out.println(user.toString());
             userService.saveUser(user);
         } catch (Exception e) {
             throw new TestPrepAndPostError("Failed to carry out pre-login test setup: " + e.getMessage());
         }
     }
+
 
     @AfterEach
     public void cleanup() {

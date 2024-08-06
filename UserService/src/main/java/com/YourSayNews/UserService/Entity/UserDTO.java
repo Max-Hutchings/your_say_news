@@ -1,6 +1,8 @@
 package com.YourSayNews.UserService.Entity;
 
 
+import com.YourSayNews.UserService.Entity.Enums.Role;
+
 import java.time.LocalDate;
 
 public class UserDTO {
@@ -21,8 +23,8 @@ public class UserDTO {
 
     public UserDTO(User user) {
         this.id = user.getId();
-        this.fName = user.getfName();
-        this.lName = user.getlName();
+        this.fName = user.getFName();
+        this.lName = user.getLName();
         this.email = user.getEmail();
         this.username = user.getUsername();
 

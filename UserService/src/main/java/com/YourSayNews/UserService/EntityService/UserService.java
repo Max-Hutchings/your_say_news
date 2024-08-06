@@ -31,8 +31,8 @@ public class UserService {
     public User saveUser(User user){
         try{
             userValidation.checkEmail(user.getEmail());
-            userValidation.checkFName(user.getfName());
-            userValidation.checkLName(user.getlName());
+            userValidation.checkFName(user.getFName());
+            userValidation.checkLName(user.getLName());
             userValidation.checkEmail(user.getEmail());
             userValidation.checkPassword(user.getPassword());
             userValidation.checkUsername(user.getUsername());

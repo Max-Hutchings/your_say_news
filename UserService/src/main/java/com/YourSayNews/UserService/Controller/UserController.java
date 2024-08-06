@@ -8,6 +8,7 @@ import com.YourSayNews.UserService.Exceptions.NoUserFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,12 +28,14 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody User user){
-        try{
+    public ResponseEntity<?> signup(@RequestBody User user) {
+        try {
             User newUser = userService.saveUser(user);
             UserDTO userDTO = new UserDTO(newUser);
             return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
 
+        }catch (HttpMessageNotReadableException httpMessageNotReadableException){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", httpMessageNotReadableException.getMessage()));
         }catch(IllegalArgumentException illegalArgumentException){
             String message = "Failed due to " + illegalArgumentException.getMessage();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
@@ -58,14 +61,17 @@ public class UserController {
     }
 
     @PostMapping("/check_user_exists")
-    public ResponseEntity<?> checkUserExists(@RequestBody Long userId){
-        try{
+    public ResponseEntity<?> checkUserExists(@RequestBody Long userId) {
+        try {
             User user = userService.findUserById(userId);
             return ResponseEntity.status(HttpStatus.OK).body(user);
+
+        }catch (HttpMessageNotReadableException httpMessageNotReadableException){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", httpMessageNotReadableException.getMessage()));
         }catch(NoUserFoundException noUserFoundException){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(noUserFoundException.getMessage());
         }catch(Exception exception){
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unknown Error" + exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unknown Error" + exception.getMessage());
     }
     }
 }

@@ -1,7 +1,5 @@
 package com.YourSayNews.UserService.Integration;
 
-import com.YourSayNews.UserService.Entity.Role;
-import com.YourSayNews.UserService.Entity.User;
 import com.YourSayNews.UserService.EntityService.UserService;
 import com.YourSayNews.UserService.Exceptions.TestPrepAndPostError;
 import org.junit.jupiter.api.AfterEach;
