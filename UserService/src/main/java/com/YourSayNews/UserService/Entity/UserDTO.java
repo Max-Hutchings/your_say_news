@@ -2,22 +2,29 @@ package com.YourSayNews.UserService.Entity;
 
 
 import com.YourSayNews.UserService.Entity.Enums.Role;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+@Setter
+@Getter
 public class UserDTO {
 
     private Long id;
 
+    @JsonProperty("fname")
     private String fName;
-
+    @JsonProperty("lname")
     private String lName;
 
     private String email;
 
     private String username;
 
-    private LocalDate dateOfBirth;
+    private LocalDateTime createdDate;
 
     private Enum<Role> roleEnum;
 
@@ -27,64 +34,9 @@ public class UserDTO {
         this.lName = user.getLName();
         this.email = user.getEmail();
         this.username = user.getUsername();
-
-        this.dateOfBirth = user.getDateOfBirth();
+        this.createdDate = user.getCreatedDate();
         this.roleEnum = user.getRoleEnum();
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getfName() {
-        return fName;
-    }
-
-    public void setfName(String fName) {
-        this.fName = fName;
-    }
-
-    public String getlName() {
-        return lName;
-    }
-
-    public void setlName(String lName) {
-        this.lName = lName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public Enum<Role> getRoleEnum() {
-        return roleEnum;
-    }
-
-    public void setRoleEnum(Enum<Role> roleEnum) {
-        this.roleEnum = roleEnum;
-    }
 }

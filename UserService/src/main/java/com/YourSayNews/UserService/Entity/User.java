@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,7 +25,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 100)
+//    @Column(length = 100)
     private String fName;
 
     @Column(length = 100)
@@ -37,19 +38,31 @@ public class User {
     private String username;
 
     private String password;
-    private Date createdDate;
+    private LocalDateTime createdDate = LocalDateTime.now();
     private Enum<Role> roleEnum;
     private boolean active = true;
+
+    public static class UserBuilder {
+        public UserBuilder roleEnum(String role) {
+            if ("ADMIN".equalsIgnoreCase(role)) {
+                this.roleEnum = Role.ADMIN;
+            } else {
+                this.roleEnum = Role.USER;
+            }
+            return this;
+        }
+
+        public UserBuilder roleEnum(Role role) {
+            this.roleEnum = role;
+            return this;
+        }
+    }
 
 
 
     public void setCreatedDate(String createdDate) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        try {
-            this.createdDate = dateFormat.parse(createdDate);
-        } catch (ParseException e) {
-            throw new RuntimeException("Invalid date format. Please use dd/MM/yyyy");
-        }
+        this.createdDate = LocalDateTime.parse(createdDate);
     }
 
 

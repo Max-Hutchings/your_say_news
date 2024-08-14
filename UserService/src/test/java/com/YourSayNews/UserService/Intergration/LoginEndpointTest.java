@@ -16,6 +16,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -46,7 +48,7 @@ public class LoginEndpointTest {
                     .email("jb@gmail.com")
                     .username("jb789LovesCake")
                     .password("MySecurePassword13#")
-                    .createdDate(new SimpleDateFormat("dd/MM/yyyy").parse("17/03/2001"))
+                    .createdDate(LocalDateTime.parse("17/03/2001 00:00:00", DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")))
                     .roleEnum(Role.USER)
                     .build();
 

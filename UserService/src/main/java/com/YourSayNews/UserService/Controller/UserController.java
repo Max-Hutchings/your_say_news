@@ -28,16 +28,26 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody User user) {
+    public ResponseEntity<?> signup(@RequestBody Map<String, String> body) {
         try {
-            User newUser = userService.saveUser(user);
-            UserDTO userDTO = new UserDTO(newUser);
+            User newUser = User.builder()
+                    .fName(body.get("fName"))
+                    .lName(body.get("lName"))
+                    .email(body.get("email"))
+                    .username(body.get("username"))
+                    .password(body.get("password"))
+                    .roleEnum(body.get("roleEnum"))
+                    .build();
+
+
+            User savedUser = userService.saveUser(newUser);
+            UserDTO userDTO = new UserDTO(savedUser);
             return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
 
         }catch (HttpMessageNotReadableException httpMessageNotReadableException){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", httpMessageNotReadableException.getMessage()));
         }catch(IllegalArgumentException illegalArgumentException){
-            String message = "Failed due to " + illegalArgumentException.getMessage();
+            Map<String, String> message = Map.of("error", "Failed due to " + illegalArgumentException.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
         }catch(Exception exception){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unknown Error" + exception.getMessage());

@@ -7,6 +7,7 @@ public class UserValidation {
 
     public void checkEmail(String email){
         if (email==null || !email.contains("@") || email.length() > 199){
+
             throw new IllegalArgumentException("Invalid Email");
         }
     }
@@ -19,7 +20,10 @@ public class UserValidation {
 
 
     public void checkFName(String fName){
-        if(fName == null || fName.isEmpty() || fName.length() > 99){
+        if(fName == null || fName.isEmpty() || fName.length() > 200){
+            System.out.println("=========================");
+            System.out.println(fName);
+            System.out.println("=========================");
             throw new IllegalArgumentException("Invalid fName");
         }
     }
