@@ -23,7 +23,7 @@ public class PostValidatorTests {
             .postTypeEnum(PostType.USER_POSTED)
             .userId(1L)
             .imageUrl("www.dsdsdsdssd")
-            .votesId(534275373L)
+            .question("Do you agree with this topic?")
             .build();
 
     @Autowired
@@ -50,7 +50,7 @@ public class PostValidatorTests {
                 .postTypeEnum(PostType.USER_POSTED)
                 .userId(1L)
                 .imageUrl("www.dsdsdsdssd")
-                .votesId(534275373L)
+                .question("Do you agree with .................")
                 .build();
 
         assertThrows(IncorrectPostValueException.class, () -> postValidators.checkTitle(shortTitlePost));
@@ -66,7 +66,7 @@ public class PostValidatorTests {
                 .postTypeEnum(PostType.USER_POSTED)
                 .userId(1L)
                 .imageUrl("www.dsdsdsdssd")
-                .votesId(534275373L)
+                .question("Do you agree with .................")
                 .build();
 
         assertThrows(IncorrectPostValueException.class, () -> postValidators.checkTitle(longTitlePost));
@@ -81,7 +81,7 @@ public class PostValidatorTests {
                 .postTypeEnum(PostType.USER_POSTED)
                 .userId(1L)
                 .imageUrl("www.dsdsdsdssd")
-                .votesId(534275373L)
+                .question("Do you agree with .................")
                 .build();
 
         assertThrows(IncorrectPostValueException.class, () -> postValidators.checkDescription(shortDescriptionPost));
@@ -97,7 +97,7 @@ public class PostValidatorTests {
                 .postTypeEnum(PostType.USER_POSTED)
                 .userId(1L)
                 .imageUrl("www.dsdsdsdssd")
-                .votesId(534275373L)
+                .question("Do you agree with .................")
                 .build();
 
         assertThrows(IncorrectPostValueException.class, () -> postValidators.checkDescription(longDescriptionPost));

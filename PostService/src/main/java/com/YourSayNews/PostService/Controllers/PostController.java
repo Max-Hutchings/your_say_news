@@ -57,7 +57,7 @@ public class PostController {
 
             Long userId = Long.parseLong(userIdStr);
 
-            getUserClient.getUserById(userId);
+//            getUserClient.getUserById(userId);
 
             List<Post> posts = postService.getAllUserPosts(userId);
 

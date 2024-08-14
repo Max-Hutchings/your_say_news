@@ -1,4 +1,4 @@
-package com.YourSayNews.UserService.Integration;
+package com.YourSayNews.UserService.Intergration;
 
 import com.YourSayNews.UserService.EntityService.UserService;
 import com.YourSayNews.UserService.Exceptions.TestPrepAndPostError;

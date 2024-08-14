@@ -3,9 +3,11 @@ package com.YourSayNews.UserCharacteristicsService.Controller;
 import com.YourSayNews.UserCharacteristicsService.Entity.Enums.*;
 import com.YourSayNews.UserCharacteristicsService.Entity.UserCharacteristics;
 import com.YourSayNews.UserCharacteristicsService.Exceptions.InvalidUserIdException;
+import com.YourSayNews.UserCharacteristicsService.Exceptions.NoUserCharacteristicsFoundException;
 import com.YourSayNews.UserCharacteristicsService.RestCalls.GetUserClient;
 import com.YourSayNews.UserCharacteristicsService.Services.UserCharacteristicsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -66,6 +68,21 @@ public class UserCharacteristicsController {
         }catch(Exception exception){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", exception.getMessage()));
         }
+    }
 
+
+    @PostMapping("/get-user-characteristics")
+    public ResponseEntity<?> getUserCharacteristics(@RequestBody Long userId){
+        try{
+            UserCharacteristics userCharacteristics = userCharacteristicsService.getUserCharacteristicsByUserId(userId);
+            return ResponseEntity.status(HttpStatus.OK).body(userCharacteristics);
+
+        }catch (HttpMessageNotReadableException httpMessageNotReadableException) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", httpMessageNotReadableException.getMessage()));
+        }catch(NoUserCharacteristicsFoundException noUserCharacteristicsFoundException){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", noUserCharacteristicsFoundException.getMessage()));
+        }catch(DataIntegrityViolationException dataIntegrityViolationException){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", dataIntegrityViolationException.getMessage()));
+        }
     }
 }
