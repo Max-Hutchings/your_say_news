@@ -7,8 +7,12 @@ import com.YourSayNews.UserCharacteristicsService.Exceptions.NoUserCharacteristi
 import com.YourSayNews.UserCharacteristicsService.RestCalls.GetUserClient;
 import com.YourSayNews.UserCharacteristicsService.Services.UserCharacteristicsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionException;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.converter.ConverterFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
@@ -57,18 +61,23 @@ public class UserCharacteristicsController {
     @PostMapping("/save-user-characteristics")
     public ResponseEntity<?> saveUserCharacteristics(@RequestBody UserCharacteristics userCharacteristics) {
         try {
-            getUserClient.getUserById(userCharacteristics.getUserId());
             UserCharacteristics savedUserCharacteristics = userCharacteristicsService.saveUserCharacteristics(userCharacteristics);
-            return ResponseEntity.status(HttpStatus.OK).body(savedUserCharacteristics);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedUserCharacteristics);
+        } catch (ConversionException | HttpMessageNotReadableException |
+                 NoUserCharacteristicsFoundException exception) {
 
-        } catch (HttpMessageNotReadableException httpMessageNotReadableException){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", httpMessageNotReadableException.getMessage()));
-        }catch(InvalidUserIdException invalidUserIdException){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", invalidUserIdException.getMessage()));
-        }catch(Exception exception){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", exception.getMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(Map.of("error", exception.getMessage()));
+
+        } catch (Exception exception) {
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(Map.of("error", exception.getMessage()));
         }
     }
+
 
 
     @PostMapping("/get-user-characteristics")
@@ -78,11 +87,17 @@ public class UserCharacteristicsController {
             return ResponseEntity.status(HttpStatus.OK).body(userCharacteristics);
 
         }catch (HttpMessageNotReadableException httpMessageNotReadableException) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", httpMessageNotReadableException.getMessage()));
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error",
+                    httpMessageNotReadableException.getMessage()).toString());
         }catch(NoUserCharacteristicsFoundException noUserCharacteristicsFoundException){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", noUserCharacteristicsFoundException.getMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error",
+                    noUserCharacteristicsFoundException.getMessage()).toString());
         }catch(DataIntegrityViolationException dataIntegrityViolationException){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", dataIntegrityViolationException.getMessage()));
+            // This will catch data integrate at the database level. However, we want validators to catch so it never
+            // trys to execute the sql.
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error",
+                    dataIntegrityViolationException.getMessage()).toString());
         }
     }
 }

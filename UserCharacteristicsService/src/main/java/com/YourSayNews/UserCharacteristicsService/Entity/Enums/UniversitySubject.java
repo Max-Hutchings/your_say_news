@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import org.hibernate.engine.internal.UnsavedValueFactory;
 
 public enum UniversitySubject {
+    NA,
     SCIENCE,
     ENGINEERING,
     ARTS,

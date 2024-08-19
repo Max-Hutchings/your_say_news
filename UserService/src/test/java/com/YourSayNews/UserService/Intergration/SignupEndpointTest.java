@@ -173,7 +173,7 @@ public class SignupEndpointTest {
 
     @Test
     public void Incorrect_FName_Too_Long() throws Exception{
-        String fName = "t".repeat(150);
+        String fName = "t".repeat(100);
         String jsonRequest = String.format("""
         {
             "fName": "%s",

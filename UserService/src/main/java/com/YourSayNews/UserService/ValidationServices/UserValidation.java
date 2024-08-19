@@ -20,10 +20,8 @@ public class UserValidation {
 
 
     public void checkFName(String fName){
-        if(fName == null || fName.isEmpty() || fName.length() > 200){
-            System.out.println("=========================");
-            System.out.println(fName);
-            System.out.println("=========================");
+        if(fName == null || fName.isEmpty() || fName.length() > 99){
+
             throw new IllegalArgumentException("Invalid fName");
         }
     }
